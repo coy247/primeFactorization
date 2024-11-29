@@ -1,10 +1,21 @@
-// 1. Identify the numbers with scalars and those without. Since only a portion of the numbers have scalars, you'll need to handle these separately.
-// 2. For the numbers with scalars, factor out the scalar value, so you're left with the base number. Now you have a set of base numbers and their corresponding scalars.
-// 3. For each base number in the set, find its prime factorization. There are several algorithms for prime factorization, such as trial division or the Pollard's rho algorithm. Implement one of these algorithms to find the prime factors for each base number.
-// 4. Keep track of the frequency of each prime factor across all the base numbers. You can use a map or a dictionary-like data structure to store the prime factors and their frequencies.
-// 5. Once you have the prime factor frequencies, identify the prime factors that occur in most or all of the base numbers. These are your common prime factors.
-// 6. If needed, you can also find the common prime factors considering the scalars by multiplying the scalar value with the base number's prime factors and then finding the common prime factors among these new sets of prime factors.
-// 7. Analyze and interpret the common prime factors based on your specific problem or context.
+import {
+  sortFactors,
+  toPrimeExponentForm,
+  findCommonFactors,
+} from "./primeSort.js";
+
+function primeSort() {
+  const testArray = [5, 2, 3, 2];
+  const sorted = sortFactors(testArray);
+  const primeForm = toPrimeExponentForm(testArray);
+  const common = findCommonFactors([testArray]); // Pass array of arrays
+
+  console.log('Sorted factors:', sorted);
+  console.log('Prime exponent form:', primeForm);
+  console.log('Common factors:', common);
+
+  return { sorted, primeForm, common };
+}
 
 function findCommonPrimeFactors(numbers) {
   const factorFrequency = new Map();
@@ -58,4 +69,58 @@ function findCommonPrimeFactors(numbers) {
   return commonFactors;
 }
 
+// Main execution
+if (import.meta.url === `file://${process.argv[1]}`) {
+  const testArray = [5, 2, 3, 2];
+  console.log('Sorted factors:', sortFactors(testArray));
+  console.log('Prime exponent form:', toPrimeExponentForm(testArray));
+  console.log('Common factors:', findCommonFactors([testArray]));
+}
+
 export { findCommonPrimeFactors };
+
+console.log("src/index loaded successfully!");
+
+async function startAndMonitorServer() {
+  try {
+    const wait = (ms) => new Promise((resolve) => setTimeout(resolve, ms));
+
+    const serverStartPromise = new Promise((resolve, reject) => {
+      console.log("Starting server...");
+      // Server startup simulation
+      setTimeout(() => {
+        resolve("Server started successfully");
+      }, 1000);
+    });
+
+    const result = await Promise.race([
+      serverStartPromise,
+      wait(5000).then(() => Promise.reject("Server startup timed out")),
+    ]);
+
+    console.log(result);
+    return true;
+  } catch (error) {
+    console.error(error);
+    console.log("Attempting to restart server...");
+    await startAndMonitorServer();
+    return true;
+  }
+}
+
+// Main execution
+if (import.meta.url === `file://${process.argv[1]}`) {
+  startAndMonitorServer()
+    .then(() => {
+      process.on("SIGINT", () => {
+        console.log("Shutting down server...");
+        process.exit(0);
+      });
+    })
+    .catch((error) => {
+      console.error("Failed to start server:", error);
+    });
+}
+
+primeSort();
+export default startAndMonitorServer;
