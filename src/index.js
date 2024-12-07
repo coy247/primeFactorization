@@ -4,8 +4,11 @@ import {
   findCommonFactors,
 } from "./primeSort.js";
 
+import { data } from "./input.js";
+
 function primeSort() {
-  const testArray = [5, 2, 3, 2];
+  // const testArray = [5, 2, 3, 2];
+  const testArray = data;
   const sorted = sortFactors(testArray);
   const primeForm = toPrimeExponentForm(testArray);
   const common = findCommonFactors([testArray]); // Pass array of arrays
